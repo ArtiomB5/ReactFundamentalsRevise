@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, ChangeEvent } from "react";
 import "../styles/app.css";
 import PostService from "../API/PostService";
 import { PostList } from "../components/PostList";
@@ -9,8 +9,10 @@ import { MyButton } from "../components/UI/Button/MyButton";
 import { usePostsSortAndSearch } from "../hooks/usePosts";
 import { MyLoader } from "../components/UI/Loader/MyLoader";
 import { useFetching } from "../hooks/useFetching";
+import { useObserver } from "../hooks/useObserver";
 import { MyPagination } from "../components/UI/Pagination/MyPagination";
 import { getPageCount } from "../utils/pages";
+import { MySelect } from "../components/UI/Select/MySelect";
 
 export type NewPostType = {
   userId: number;
@@ -27,6 +29,7 @@ export const Posts = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
+  const LastElemRef = useRef();
 
   //кастомный хук
   //кастомный хук, который получает посты, параметр сортировки и строку поиска
@@ -41,7 +44,7 @@ export const Posts = () => {
   //кастомный хук
   const useFetchingHandler = async () => {
     const response = await PostService.getAll(limit, page);
-    setPosts(response.data);
+    setPosts([...posts, ...response.data]);
     const totalCount = response.headers["x-total-count"];
     setTotalPages(getPageCount(totalCount, limit));
   };
@@ -77,13 +80,22 @@ export const Posts = () => {
     setPosts([...posts].filter((post) => post.id !== deletedPostId));
   };
 
+  useObserver({
+    elementRef: LastElemRef,
+    isLoading: isLoading as boolean,
+    canLoad: page < totalPages,
+    setPageCallback: () => {
+      setPage(page + 1);
+    }
+  });
+
   useEffect(() => {
     fetchPosts();
   }, [page]);
 
-  const changePage = (page: number) => {
-    setPage(page);
-  };
+  // const changePage = (page: number) => {
+  //   setPage(page);
+  // };
 
   return (
     <div className="App">
@@ -102,23 +114,29 @@ export const Posts = () => {
 
       <PostFilter postsFilter={filter} setPostsFilter={setFilter} />
 
-      {isLoading ? (
-        <MyLoader />
-      ) : (
-        <PostList
-          title={"Javascript Posts"}
-          postsList={searchAndSortedPosts}
-          deletePostCallback={deletePost}
-        />
-      )}
+      <PostList
+        title={"Javascript Posts"}
+        postsList={searchAndSortedPosts}
+        deletePostCallback={deletePost}
+      />
+      <div
+        ref={LastElemRef}
+        style={{
+          width: "100%",
+          height: "0px",
+          backgroundColor: "transparent"
+        }}
+      />
+
+      {isLoading && <MyLoader />}
 
       {error ? <h3 style={{ textAlign: "center" }}>Error: {error}</h3> : ""}
 
-      <MyPagination
+      {/* <MyPagination
         totalPages={totalPages}
         changePage={changePage}
         page={page}
-      />
+      /> */}
     </div>
   );
 };

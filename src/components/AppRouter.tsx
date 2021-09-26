@@ -68,7 +68,7 @@ export const AppRouter = () => {
             })}
 
         {/* компонента Redicrect отображает компоненту, служащую стартовой страиницей */}
-        <Redirect to="/login" />
+        {stateIsAuth ? <Redirect to="/posts" /> : <Redirect to="/login" />}
       </Switch>
     </>
   );
