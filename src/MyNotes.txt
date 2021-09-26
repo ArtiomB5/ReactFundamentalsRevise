@@ -24,3 +24,91 @@ deps - массив зависимостей (например: переменн
 dependencies - зависимости
 
 5. Функция includes()
+
+6. Присвоение 2х классов:
+<div className={[cls.myModal, cls.active].join(" ")}></div>
+join - возвращает строку, состоящую из элементов массива, разделенных в данном случае пробелом,
+т.к. именно пробел является параметром функции join
+
+7.stopPropagation
+
+8. React Transition Group - библиотека для анимации
+@types/react Transition Group
+
+Компонент TransitionGroup - анимация списков
+
+9. Кастомные пользовательские хуки - хуки которые внутри себя используют стандартные хуки из react
+
+10. библиотека axios
+
+11. async | await
+
+12. Жизненный цикл компонента | useEffect
+ Этап 1: Монтирование (Mount) - создается компонент и вмонтируется в дом дерево
+         Данный этап используется для: подгрузки данных, прикрепления слушателей событий
+ Этап 2: Обновление компонента (Update) - произошлно изменение состояния (state), что повлекло ререндер компонента
+         Это этак активной жизки компонента, когда он работает и мы его видим.
+         Данный этап используется для: отслеживания изменения каки-либо зависимостей, 
+         произведение необходимых действий
+ Этап 3: Размонтирование (Unmount) - Этап, когда мы удаляет\скрываем компонент
+         Данный этап используется для: отписка от слушателей событий, очистка глобального хранилища
+
+useEffect(callback, deps)
+callback - кобэк функция
+deps - массив зависимостей (например: переменные, поля объекта)
+
+Работа с этапом №1:
+useEffect(() => fetchPosts(), [])
+Если массив зависимостей пустой, то функция отработает один раз в момент монтирования компонента.
+
+Работа с этапом №2:
+useEffect(() => fetchPosts(), [filter])
+Будет вызываться функция каждый раз при изменении filter.
+
+Работа с этапом №3:
+useEffect(() => {
+  fetchPosts()
+  return(
+    () => {
+      -делаем очистку-
+    }
+  )
+}, [filter])
+return отработает когда компонента будет уничтожаться
+
+13. static async
+
+14.useContext
+  1. Cоздание контекста - исп. функции createContext
+  2. Инициализация контекста - в функцию createContext передаются исходные данные, {},
+  [], или null
+  export const AuthContext = createContext(null);
+  3.1. В компоненте APP оборачиваем остальные компоненты компонентой контекста, из пункта 2
+    <AuthorizedContext.Provider value={AuthorizedContextValue}>
+      {/* HashRouter - отслеживает изменение путей и //перерисовывает компоненты. */}
+      <HashRouter>
+        <Navbar />
+        <AppRouter />
+      </HashRouter>
+    </AuthorizedContext.Provider>
+
+  3.2. В компоненте APP был создан локальный стейт с помощью хука useState
+  Данные для нашего контекта помещены в объект и переданы через атрибут value - см. 3.1.
+  Данные включают в себя: данные локального стейта и функцию для его изменения.
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const AuthorizedContextValue = {
+    stateIsAuth: isAuthorized,
+    setStateIsAuth: setIsAuthorized
+  };
+  4. Получение доступа к созданному контексту из компоненты нуждающейся в необходимых
+  const { stateIsAuth, setStateIsAuth } = useContext(AuthorizedContext); 
+  stateIsAuth - ключ, используемый при создании объекта, для value в AuthorizedContext.Provider.
+  Ханит локальный стейт. См. п.3.2
+  setStateIsAuth - ключ, используемый при создании объекта, для value в AuthorizedContext.Provider
+  Ханит функцию для изменения локального стейта. См. п.3.2
+  AuthorizedContext - наш контекст, созданный в п.2
+15. localStorage
+Сохранение данных в localStorage, переданы (кдюч, зачение) : localStorage.setItem("auth", "true");
+Удаление данных в localStorage, передан (кдюч) : localStorage.removeItem("auth");
+Получение данных из localStorage, передан (кдюч) : localStorage.getItem("auth");
+

@@ -1,4 +1,4 @@
-import { Children, MouseEvent } from "react";
+import { MouseEvent } from "react";
 import classes from "./MyButton.module.css";
 
 type PropsType = {

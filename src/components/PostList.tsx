@@ -1,5 +1,7 @@
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { PostItem } from "../components/PostItem";
 import { ObjType } from "../components/PostItem";
+import "../styles/app.css";
 
 type PropsType = {
   title: string;
@@ -15,16 +17,19 @@ export const PostList = (props: PropsType) => {
   return (
     <div>
       <h2 style={{ textAlign: "center" }}>{props.title}</h2>
-      {props.postsList.map((post, postIndex) => {
-        return (
-          <PostItem
-            post={post}
-            index={postIndex}
-            deletePostCallback={props.deletePostCallback}
-            key={postIndex}
-          />
-        );
-      })}
+      <TransitionGroup>
+        {props.postsList.map((post, postIndex) => {
+          return (
+            <CSSTransition key={postIndex} timeout={500} classNames="post">
+              <PostItem
+                post={post}
+                index={post.id}
+                deletePostCallback={props.deletePostCallback}
+              />
+            </CSSTransition>
+          );
+        })}
+      </TransitionGroup>
     </div>
   );
 };

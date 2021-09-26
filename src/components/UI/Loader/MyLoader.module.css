@@ -1,0 +1,20 @@
+.circle {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  margin: 50px auto;
+  border: 3px dashed teal;
+  animation: rotate 2s infinite cubic-bezier(0.36, 0.15, 0.89, 0.32);
+}
+
+/* ключевые кадры */
+@keyframes rotate {
+  /* начало анимации */
+  from {
+    transform: rotate(-360deg);
+  }
+  /* конеч анимации */
+  to {
+    transform: rotate(360deg);
+  }
+}

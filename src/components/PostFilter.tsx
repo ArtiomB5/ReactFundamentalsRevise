@@ -3,7 +3,7 @@ import { MySelect } from "../components/UI/Select/MySelect";
 import { MyInput } from "../components/UI/Input/MyInput";
 
 type filterType = {
-  filter: string;
+  sort: string;
   query: string;
 };
 
@@ -21,7 +21,7 @@ export const PostFilter = (props: PropsType) => {
   //функция sortPosts получает тип сортировки из дочерней компоненты
   //и сортирует посты в зависимости от полученных от дочерней компоненты данных
   const sortPosts = (sortValue: string) => {
-    props.setPostsFilter({ ...props.postsFilter, filter: sortValue });
+    props.setPostsFilter({ ...props.postsFilter, sort: sortValue });
   };
 
   //функция setSerchQuery получает данные из строки поиска дочерней компоненты
