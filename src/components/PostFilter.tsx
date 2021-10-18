@@ -39,6 +39,7 @@ export const PostFilter = (props: PropsType) => {
       />
 
       <MyInput
+        type={"text"}
         placeholder={"Enter your search term"}
         value={props.postsFilter.query}
         setValue={(event: ChangeEvent<HTMLInputElement>) =>
